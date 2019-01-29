@@ -37,7 +37,7 @@ export default function mineSweeperGrid({ bombs, width, length }) {
                 index + width,      // BOTTOM MID
                 index + width - 1,  // BOTTOM LEFT
                 index - 1           // LEFT
-            ]
+            ];
 
             const checkBomb = (position)=> {
                 return grid[position] && grid[position].bomb ? 1 : 0;
