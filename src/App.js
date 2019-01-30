@@ -10,11 +10,30 @@ class App extends Component {
         mines: [],
         bombs: undefined,
         width: 0,
-        height: 0
+        height: 0,
+        face: '😎',
+        currentFlag: 0,
+        maxFlag: 0
+    }
+
+    sadFace() {
+        this.setState({ face: '🥺' })
+    }
+
+    coolFace() {
+        this.setState({ face: '😎' })
     }
 
     addMines(mines) {
         this.setState({ mines });
+    }
+
+    addFlag(value) {
+        this.setState({ currentFlag: value });
+    }
+
+    maxFlag(value) {
+        this.setState({ maxFlag: value });
     }
 
     getDimensions(dimensions) {
@@ -22,13 +41,29 @@ class App extends Component {
     }
 
     render() {
+        const flags = {
+            current: this.state.currentFlag,
+            max: this.state.maxFlag
+        }
         return (
             <div className="App">
-                <Controls addMines={this.addMines.bind(this)} getDimensions={this.getDimensions.bind(this)}/>
-                <div className="display">
-                    <Display mines={this.state.mines}/>
-                    <Minefield mines={this.state.mines} />
-                </div>
+                <Controls addMines={this.addMines.bind(this)} 
+                    getDimensions={this.getDimensions.bind(this)} 
+                    coolFace={this.coolFace.bind(this)}
+                    maxFlag={this.maxFlag.bind(this)}
+                />
+                <Display mines={this.state.mines} 
+                    face={this.state.face}
+                    flags={flags.current}
+                />
+                <Minefield 
+                    mines={this.state.mines} 
+                    sadFace={this.sadFace.bind(this)}
+                    addFlag={this.addFlag.bind(this)}
+                    flags={flags}
+                    width={this.state.width}
+                    height={this.state.height}
+                />
             </div>
         );
     }

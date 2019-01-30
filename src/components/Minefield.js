@@ -2,21 +2,25 @@ import React, { Component } from 'react';
 import './../style/minefield.css'
 import Mine from './Mine';
 
-export default class Minefield extends Component {
-    gridTemplate() {
-        const columns = 10;
-        return '' + columns;
-    }
-
-    render() {
-        return (
-            <div className="minefield">
-                {
-                    this.props.mines.map((mine, index) => (
-                        <Mine mine={mine} key={index} />
-                    ))
-                }
-            </div>
-        );
-    }
+function Minefield(props) {
+    return (
+        <div className="minefield"
+            style={{ 
+                gridTemplateColumns: `repeat(${props.width}, 1fr)`,
+                gridTemplateRows: `repeat(${props.height}, 1fr)`
+            }}
+        >
+            {
+                props.mines.map((mine, index) => (
+                    <Mine mine={mine} key={index} 
+                        sadFace={props.sadFace}
+                        addFlag={props.addFlag}
+                        flags={props.flags}
+                    />
+                ))
+            }
+        </div>
+    );
 }
+
+export default Minefield;
