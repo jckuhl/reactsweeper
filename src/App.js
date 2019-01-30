@@ -16,7 +16,7 @@ class App extends Component {
         maxFlag: 0
     }
 
-    sadFace() {
+    '🥺'() {
         this.setState({ face: '🥺' })
     }
 
@@ -58,7 +58,7 @@ class App extends Component {
                 />
                 <Minefield 
                     mines={this.state.mines} 
-                    sadFace={this.sadFace.bind(this)}
+                    sadFace={this['🥺'].bind(this)}
                     addFlag={this.addFlag.bind(this)}
                     flags={flags}
                     width={this.state.width}
