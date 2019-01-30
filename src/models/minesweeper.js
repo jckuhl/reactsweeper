@@ -21,8 +21,11 @@ function shuffle(array) {
     return result;
 }
 
-export default function mineSweeperGrid({ bombs, width, length }) {
-    const grid = new Array(width * length)
+export default function mineSweeperGrid({ bombs, width, height }) {
+    bombs = parseInt(bombs);
+    width = parseInt(width);
+    height = parseInt(height);
+    const grid = new Array(width * height)
                 .fill(new Mine({ bomb: true, squares: -1}), 0, bombs)
                 .fill(new Mine({ bomb: false }), bombs);
     return shuffle(grid).map((mine, index) => {

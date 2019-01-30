@@ -2,13 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import { MineSweeperProvider } from './components/Context';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-    <MineSweeperProvider>
-        <App/>
-    </MineSweeperProvider>, 
+    <App/>, 
     document.getElementById('root')
 );
 

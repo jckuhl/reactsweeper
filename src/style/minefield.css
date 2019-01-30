@@ -1,0 +1,18 @@
+.minefield {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    box-sizing: border-box;
+    /* grid-gap: 1px; */
+    width: 125px;
+}
+
+.mine {
+    text-align: center;
+    align-self: center;
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+    box-shadow: 0 0 0 1px black;
+    font-size: 1.25rem;
+}
