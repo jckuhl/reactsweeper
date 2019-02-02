@@ -20,15 +20,19 @@ class App extends Component {
         this.setState({ face: '🥺' })
     }
 
-    coolFace() {
+    '😎'() {
         this.setState({ face: '😎' })
     }
 
     addMines(mines) {
+        mines = mines.map(mine => {
+            mine.active = false;
+            return mine;
+        })
         this.setState({ mines });
     }
 
-    addFlag(value) {
+    setFlag(value) {
         this.setState({ currentFlag: value });
     }
 
@@ -49,7 +53,7 @@ class App extends Component {
             <div className="App">
                 <Controls addMines={this.addMines.bind(this)} 
                     getDimensions={this.getDimensions.bind(this)} 
-                    coolFace={this.coolFace.bind(this)}
+                    coolFace={this['😎'].bind(this)}
                     maxFlag={this.maxFlag.bind(this)}
                 />
                 <Display mines={this.state.mines} 
@@ -59,7 +63,7 @@ class App extends Component {
                 <Minefield 
                     mines={this.state.mines} 
                     sadFace={this['🥺'].bind(this)}
-                    addFlag={this.addFlag.bind(this)}
+                    setFlag={this.setFlag.bind(this)}
                     flags={flags}
                     width={this.state.width}
                     height={this.state.height}

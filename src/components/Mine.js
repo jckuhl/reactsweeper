@@ -27,19 +27,54 @@ export default class Mine extends Component {
             // if uncovered but not flagged, add a flag.
             if(!this.state.uncovered && !this.state.flagged) {
                 if(current !== max) {
-                    console.log('Flag')
                     this.setState({ flagged: true });
-                    this.props.addFlag(current + 1);
+                    this.props.setFlag(current + 1);
                 }
+            } else if(!this.state.uncovered && this.state.flagged) {
+                this.setState({ flagged: false });
+                this.props.setFlag(current - 1);
             }
         }
     }
 
+    getColor() {
+        if(this.props.mine.squares === -1 || this.props.mine.squares === 0) {
+            return;
+        } else {
+            const colors = [
+                'violet',
+                'indigo',
+                'blue',
+                'green',
+                'yellow',
+                'orange',
+                'red',
+                'maroon'
+            ]
+            return colors[this.props.mine.squares - 1]
+        }
+    }
+
+    squareValue() {
+        if(this.state.uncovered) {
+            return this.props.mine.bomb ? '💣' 
+                    : this.props.mine.squares === 0 ? '' 
+                    : this.props.mine.squares;
+        } else {
+            return this.state.flagged ? '❓' : '';
+        }
+    }
+
     render() {
-        const bomb = '💣'
+        const textColor = this.getColor();
         return (
-            <div className="mine" onClick={this.sweepMine.bind(this)} onContextMenu={this.sweepMine.bind(this)}>
-                { this.props.mine.bomb ? bomb : this.props.mine.squares }  
+            <div className={`mine + ${this.state.uncovered ? '' : 'covered'}`} 
+                onClick={this.sweepMine.bind(this)} 
+                onContextMenu={this.sweepMine.bind(this)}
+                style={{
+                    color: textColor
+                }}>
+                { this.squareValue() }  
             </div>
         );
     }

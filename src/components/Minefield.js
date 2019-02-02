@@ -8,13 +8,12 @@ function Minefield(props) {
             style={{ 
                 gridTemplateColumns: `repeat(${props.width}, 1fr)`,
                 gridTemplateRows: `repeat(${props.height}, 1fr)`
-            }}
-        >
+            }}>
             {
                 props.mines.map((mine, index) => (
                     <Mine mine={mine} key={index} 
                         sadFace={props.sadFace}
-                        addFlag={props.addFlag}
+                        setFlag={props.setFlag}
                         flags={props.flags}
                     />
                 ))
