@@ -11,10 +11,12 @@ function Minefield(props) {
             }}>
             {
                 props.mines.map((mine, index) => (
-                    <Mine mine={mine} key={index} 
+                    <Mine mine={mine} key={index} position={index}
                         sadFace={props.sadFace}
                         setFlag={props.setFlag}
                         flags={props.flags}
+                        clearBlanks={props.clearBlanks}
+                        uncoverMine={props.uncoverMine}
                     />
                 ))
             }

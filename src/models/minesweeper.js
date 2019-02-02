@@ -4,6 +4,7 @@ class Mine {
         this.bomb = bomb;
         this.squares = squares;
         this.active = false;
+        this.flagged = false;
     }
 
 }
@@ -41,7 +42,7 @@ export default function mineSweeperGrid({ bombs, width, height }) {
                 bottomleft: index + width - 1,
                 left: index - 1
             };
-            const filterPosition = (array, pos)=> array.filter(([key]) => !key.includes(pos));
+            const filterPosition = (array, position)=> array.filter(([key]) => !key.includes(position));
 
             const checkBomb = (position)=> {
                 return grid[position] && grid[position].bomb ? 1 : 0;
@@ -63,8 +64,8 @@ export default function mineSweeperGrid({ bombs, width, height }) {
                 positionKeyValues = filterPosition(positionKeyValues, 'bottom');
             }
 
-            positionKeyValues.forEach(([key, value]) => {
-                numBombs += checkBomb(value);
+            positionKeyValues.forEach(([key, position]) => {
+                numBombs += checkBomb(position);
             });
 
             mine.squares = numBombs;
