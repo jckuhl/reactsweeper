@@ -63,51 +63,8 @@ class App extends Component {
         let available = [];
         used.add(index);
         const filterPosition = (array, position)=> array.filter(([key]) => !key.includes(position));
-        function findAvailable(index) {
-
-            const POSITION = {
-                topleft: index - width - 1,
-                top: index - width,
-                topright: index - width + 1,
-                right: index + 1,
-                bottomright: index + width + 1,
-                bottom: index + width,
-                bottomleft: index + width - 1,
-                left: index - 1
-            };
-            let avail = [];
-            let positionKeyValues = Object.entries(POSITION);
-            if(index >= 0 && index < width) {
-                positionKeyValues = filterPosition(positionKeyValues, 'top');
-            }
-            if(index % width === 0) {
-                positionKeyValues = filterPosition(positionKeyValues, 'left');
-            }
-            if(index % width === width - 1) {
-                positionKeyValues = filterPosition(positionKeyValues, 'right');
-            }
-            if((index >= (height * width - width) && index < height * width)) {
-                positionKeyValues = filterPosition(positionKeyValues, 'bottom');
-            }
-            avail = positionKeyValues.map(([key, position]) => {
-                if(!used.has(position) && mines[position] && mines[position].squares === 0) {
-                    mines[position].active = true;
-                    used.add(position);
-                    return position;
-                } else {
-                    return null;
-                }
-            }).filter(value => value !== null);
-            return avail;
-        }
-        let nextIndex = index;
-        do {
-            if(nextIndex) {
-                available = findAvailable(nextIndex);
-                nextIndex = available.pop();
-            }
-        } while(available.length)
         
+        mines[index].active = true;
         this.setState({ mines });
     }
 

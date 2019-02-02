@@ -18,4 +18,8 @@
 
 .covered {
     background: grey;
+    border-top: solid 2px white;
+    border-left: solid 2px white;
+    border-bottom: solid 2px darkgray;
+    border-right: solid 2px darkgray;
 }

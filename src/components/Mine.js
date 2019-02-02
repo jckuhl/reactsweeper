@@ -39,8 +39,8 @@ export default class Mine extends Component {
                 'violet',
                 'indigo',
                 'blue',
+                'darkgreen',
                 'green',
-                'yellow',
                 'orange',
                 'red',
                 'maroon'
