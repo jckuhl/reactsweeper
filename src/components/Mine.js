@@ -9,12 +9,11 @@ export default class Mine extends Component {
         const { mine, position, uncoverMine, sadFace, setFlag } = this.props;
         // if clicked on and unflagged, explode, reveal blanks, or reveal number
         if (event.type === 'click' && !mine.flagged) {
-            // this.setState({ uncovered: true });
             uncoverMine(position);
             if(mine.bomb) {
                 sadFace();
             } else if(mine.squares === 0) {
-                // this.props.clearBlanks(this.props.position);
+                this.props.clearBlanks(this.props.position);
             } else {
                 console.log('Reveal number')
             }
@@ -64,7 +63,7 @@ export default class Mine extends Component {
     render() {
         const textColor = this.getColor();
         return (
-            <div className={`mine + ${this.props.mine.active ? '' : 'covered'}`} 
+            <div className={`mine ${this.props.mine.active ? '' : 'covered'}`} 
                 onClick={this.sweepMine.bind(this)} 
                 onContextMenu={this.sweepMine.bind(this)}
                 style={{

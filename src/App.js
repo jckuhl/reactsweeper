@@ -18,6 +18,11 @@ class App extends Component {
 
     '🥺'() {
         this.setState({ face: '🥺' })
+        const mines = this.state.mines.map(mine => {
+            mine.active = true;
+            return mine;
+        });
+        this.setState({ mines });
     }
 
     '😎'() {
@@ -25,10 +30,6 @@ class App extends Component {
     }
 
     addMines(mines) {
-        mines = mines.map(mine => {
-            mine.active = false;
-            return mine;
-        })
         this.setState({ mines });
     }
 
@@ -44,7 +45,10 @@ class App extends Component {
     }
 
     getDimensions(dimensions) {
-        this.setState({ width: dimensions.width, height: dimensions.height });
+        this.setState({ 
+            width: parseInt(dimensions.width), 
+            height: parseInt(dimensions.height)
+        });
     }
 
     uncoverMine(index) {
@@ -54,17 +58,13 @@ class App extends Component {
     }
 
     clearBlanks(index) {
-        console.log(index);
-        const mines = this.state.mines;
-        const width = this.state.width;
-        const height = this.state.height;
-        if(!mines[index]) return;
-        if(!mines[index].bomb) {
-            mines[index].active = true;
-        } else {
-            return;
-        }
-        if(mines[index].squares === 0) {
+        const { mines, width, height } = this.state;
+        const used = new Set();
+        let available = [];
+        used.add(index);
+        const filterPosition = (array, position)=> array.filter(([key]) => !key.includes(position));
+        function findAvailable(index) {
+
             const POSITION = {
                 topleft: index - width - 1,
                 top: index - width,
@@ -75,9 +75,7 @@ class App extends Component {
                 bottomleft: index + width - 1,
                 left: index - 1
             };
-
-            const filterPosition = (array, pos)=> array.filter(([key]) => !key.includes(pos));
-
+            let avail = [];
             let positionKeyValues = Object.entries(POSITION);
             if(index >= 0 && index < width) {
                 positionKeyValues = filterPosition(positionKeyValues, 'top');
@@ -88,16 +86,28 @@ class App extends Component {
             if(index % width === width - 1) {
                 positionKeyValues = filterPosition(positionKeyValues, 'right');
             }
-            if(index >= (height * width - width) && index < height * width) {
+            if((index >= (height * width - width) && index < height * width)) {
                 positionKeyValues = filterPosition(positionKeyValues, 'bottom');
             }
-
-            positionKeyValues.forEach(([key, value])=> {
-                this.clearBlanks(parseInt(value));
-            });
-        } else {
-            return;
+            avail = positionKeyValues.map(([key, position]) => {
+                if(!used.has(position) && mines[position] && mines[position].squares === 0) {
+                    mines[position].active = true;
+                    used.add(position);
+                    return position;
+                } else {
+                    return null;
+                }
+            }).filter(value => value !== null);
+            return avail;
         }
+        let nextIndex = index;
+        do {
+            if(nextIndex) {
+                available = findAvailable(nextIndex);
+                nextIndex = available.pop();
+            }
+        } while(available.length)
+        
         this.setState({ mines });
     }
 
