@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import Controls from './components/Controls';
 import Minefield from './components/Minefield';
 import Display from './components/Display';
-import './App.css';
+
+const GameContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    margin: 1rem auto;
+    justify-content: center;
+`;
 
 class App extends Component {
 
@@ -74,7 +82,7 @@ class App extends Component {
             max: this.state.maxFlag
         }
         return (
-            <div className="App">
+            <GameContainer>
                 <Controls addMines={this.addMines.bind(this)} 
                     getDimensions={this.getDimensions.bind(this)} 
                     coolFace={this['😎'].bind(this)}
@@ -94,7 +102,7 @@ class App extends Component {
                     clearBlanks={this.clearBlanks.bind(this)}
                     uncoverMine={this.uncoverMine.bind(this)}
                 />
-            </div>
+            </GameContainer>
         );
     }
 }

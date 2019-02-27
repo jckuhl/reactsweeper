@@ -1,14 +1,18 @@
 import React from 'react';
-import './../style/minefield.css'
+import styled from 'styled-components';
 import Mine from './Mine';
+
+const MineGrid = styled.div`
+    display: grid;
+    width: auto;
+    margin: 0 auto;
+    grid-template-columns: ${props => `repeat(${props.width}, 1fr)`};
+    grid-template-rows: ${props => `repeat(${props.height}, 1fr)`};
+`;
 
 function Minefield(props) {
     return (
-        <div className="minefield"
-            style={{ 
-                gridTemplateColumns: `repeat(${props.width}, 1fr)`,
-                gridTemplateRows: `repeat(${props.height}, 1fr)`
-            }}>
+        <MineGrid width={props.width} height={props.height}>
             {
                 props.mines.map((mine, index) => (
                     <Mine mine={mine} key={index} position={index}
@@ -20,7 +24,7 @@ function Minefield(props) {
                     />
                 ))
             }
-        </div>
+        </MineGrid>
     );
 }
 
