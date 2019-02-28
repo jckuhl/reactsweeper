@@ -31,7 +31,8 @@ export default function Mine(props) {
             } else if(mine.squares === 0) {
                 props.clearBlanks(props.position);
             } else {
-                console.log('Reveal number')
+                // console.log('Reveal number')
+                // TODO: Do I need this else?
             }
         } else if (event.type === 'contextmenu') {
             const { current, max } = props.flags;
