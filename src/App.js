@@ -24,7 +24,7 @@ class App extends Component {
         maxFlag: 0
     }
 
-    '🥺'() {
+    sadface = () => {
         this.setState({ face: '🥺' })
         const mines = this.state.mines.map(mine => {
             mine.active = true;
@@ -33,46 +33,82 @@ class App extends Component {
         this.setState({ mines });
     }
 
-    '😎'() {
+    coolface = () => {
         this.setState({ face: '😎' })
     }
 
-    addMines(mines) {
+    addMines = (mines) => {
         this.setState({ mines });
     }
 
-    setFlag(value, index, flagged) {
+    setFlag = (value, index, flagged) => {
         this.setState({ currentFlag: value });
         const mines = this.state.mines;
         mines[index].flagged = !flagged;
         this.setState({ mines })
     }
 
-    maxFlag(value) {
+    maxFlag = (value) => {
         this.setState({ maxFlag: value });
     }
 
-    getDimensions(dimensions) {
+    getDimensions = (dimensions) => {
         this.setState({ 
             width: parseInt(dimensions.width), 
             height: parseInt(dimensions.height)
         });
     }
 
-    uncoverMine(index) {
+    uncoverMine = (index) => {
         const mines = this.state.mines;
         mines[index].active = true;
         this.setState({ mines });
     }
 
-    clearBlanks(index) {
+    clearBlanks = (index) => {
         const { mines, width, height } = this.state;
-        const used = new Set();
-        let available = [];
-        used.add(index);
-        const filterPosition = (array, position)=> array.filter(([key]) => !key.includes(position));
-        
-        mines[index].active = true;
+        const positionFunctions = {
+            topleft: index => index - width - 1, //top left
+            top: index => index - width,     //top
+            topright: index => index - width + 1, //top right
+            right: index => index + 1,         //right
+            bottomright: index => index + width + 1, //bottom right
+            bottom: index => index + width,     //bottom
+            bottomleft: index => index + width - 1, //bottom left
+            left: index => index - 1          //left
+        }
+
+        function clear(index) {
+            let positions = Object.entries(positionFunctions);
+
+            // edge detection
+            if(index >= 0 && index <= width) {
+                positions = positions.filter(([k, v]) => !k.includes('top'));
+            }
+            if(index % width === 0) {
+                positions = positions.filter(([k, v])=> !k.includes('left'));
+            }
+            if((index + 1) % width === 0) {
+                positions = positions.filter(([k, v])=> !k.includes('right'));
+            }
+            if(index >= width * height - width && index < width * height) {
+                positions = positions.filter(([k, v])=> !k.includes('bottom'));
+            }
+
+            const indices = positions
+                .map(([key, position]) => position(index))
+                // .filter(index => index >= 0 && index < width * height)
+                .filter(index => !mines[index].active && !mines[index].bomb);
+            return indices;
+        }
+    
+        const indices = clear(index);
+
+        mines.forEach((mine, index) => {
+            if(indices.includes(index)) {
+                mine.active = true;
+            }
+        });
         this.setState({ mines });
     }
 
@@ -83,10 +119,10 @@ class App extends Component {
         }
         return (
             <GameContainer>
-                <Controls addMines={this.addMines.bind(this)} 
-                    getDimensions={this.getDimensions.bind(this)} 
-                    coolFace={this['😎'].bind(this)}
-                    maxFlag={this.maxFlag.bind(this)}
+                <Controls addMines={this.addMines} 
+                    getDimensions={this.getDimensions} 
+                    coolFace={this.coolface}
+                    maxFlag={this.maxFlag}
                 />
                 <Display mines={this.state.mines} 
                     face={this.state.face}
@@ -94,13 +130,13 @@ class App extends Component {
                 />
                 <Minefield 
                     mines={this.state.mines} 
-                    sadFace={this['🥺'].bind(this)}
-                    setFlag={this.setFlag.bind(this)}
+                    sadFace={this.sadface}
+                    setFlag={this.setFlag}
                     flags={flags}
                     width={this.state.width}
                     height={this.state.height}
-                    clearBlanks={this.clearBlanks.bind(this)}
-                    uncoverMine={this.uncoverMine.bind(this)}
+                    clearBlanks={this.clearBlanks}
+                    uncoverMine={this.uncoverMine}
                 />
             </GameContainer>
         );
