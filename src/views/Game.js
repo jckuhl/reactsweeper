@@ -6,7 +6,6 @@ import Display from '../components/Display';
 
 const GameContainer = styled.div`
     display: flex;
-    position: relative;
     flex-direction: column;
     width: 40%;
     margin: 1rem auto;
@@ -15,6 +14,10 @@ const GameContainer = styled.div`
 
 const WinMessage = styled.div`
     position: absolute;
+    top: ${props => props.position ? props.position.top + 'px' : 0};
+    left: ${props => props.position ? props.position.left + 'px' : 0};
+    font-size: 3rem;
+    text-align: center;
 `;
 
 export default class Game extends Component {
@@ -27,7 +30,12 @@ export default class Game extends Component {
         face: '😎',
         currentFlag: 0,
         maxFlag: 0,
-        didWin: true
+        didWin: true,
+        winMessagePosition: {
+            top: 0,
+            left: 0
+        },
+        winMessageDiv: React.createRef()
     }
 
     sadface = () => {
@@ -48,6 +56,13 @@ export default class Game extends Component {
             height: dimensions.height,
             face:  '😎'
         });
+    }
+
+    setWinMessagePosition = (top, left) => {
+        if(this.state.winMessageDiv) {
+            const offset = this.state.winMessageDiv.current.getBoundingClientRect().width / 2;
+            this.setState({ winMessagePosition: { top, left: left - offset }});
+        }
     }
 
     setFlag = (value, index, flagged) => {
@@ -153,7 +168,10 @@ export default class Game extends Component {
                     flags={flags.current}
                 />
                 { this.state.didWin ? 
-                    <WinMessage>You won!</WinMessage> : 
+                    <WinMessage position={this.state.winMessagePosition}
+                        ref={this.state.winMessageDiv}>
+                        You won!
+                    </WinMessage> : 
                     null
                 }
                 <Minefield 
@@ -166,6 +184,7 @@ export default class Game extends Component {
                     clearBlanks={this.clearBlanks}
                     uncoverMine={this.uncoverMine}
                     didWin={this.state.didWin}
+                    setWinMessagePosition={this.setWinMessagePosition}
                 />
             </GameContainer>
         );

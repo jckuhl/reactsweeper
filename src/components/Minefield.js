@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import Mine from './Mine';
 
@@ -11,8 +11,13 @@ const MineGrid = styled.div`
 `;
 
 function Minefield(props) {
+    const minefieldDiv = useRef(null);
+    useEffect(()=> {
+        const { top, left } = minefieldDiv.current.getBoundingClientRect();
+        props.setWinMessagePosition(top, left);
+    }, []);
     return (
-        <MineGrid width={props.width} height={props.height}>
+        <MineGrid width={props.width} height={props.height} ref={minefieldDiv}>
             {
                 props.mines.map((mine, index) => (
                     <Mine mine={mine} key={index} position={index}

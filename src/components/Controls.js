@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useRef } from 'react';
 import minesweeper from './../models/minesweeper';
 
 export default class Controls extends Component {
