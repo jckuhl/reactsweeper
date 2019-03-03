@@ -1,18 +1,16 @@
-import React, { Component, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import minesweeper from './../models/minesweeper';
 
-export default class Controls extends Component {
-    state = {
-        bombInput: React.createRef(),
-        widthInput: React.createRef(),
-        heightInput: React.createRef(),
-        disabled: false
-    }
+export default function Controls(props) {
+    const bombInput = useRef(null);
+    const widthInput = useRef(null);
+    const heightInput = useRef(null);
+    const [disabled, setDisabled] = useState(false);
 
-    validate = event => {
-        const bombs = parseInt(this.state.bombInput.current.value);
-        const width = parseInt(this.state.widthInput.current.value);
-        const height = parseInt(this.state.heightInput.current.value);
+    const validate = event => {
+        const bombs = parseInt(bombInput.current.value);
+        const width = parseInt(widthInput.current.value);
+        const height = parseInt(heightInput.current.value);
         let invalidBombs = false;
         let invalidWidth = false;
         let invalidHeight = false;
@@ -26,63 +24,61 @@ export default class Controls extends Component {
         if(height < 10 || height > 25) {
             invalidHeight = true;
         }
-        this.setState({ disabled: !(!invalidBombs && !invalidWidth && !invalidHeight) });
+        setDisabled(!(!invalidBombs && !invalidWidth && !invalidHeight));
     }
 
-    startGame = event => {
+    const startGame = event => {
         event.preventDefault();
         
-        const bombs = this.state.bombInput.current.value;
-        const width = parseInt(this.state.widthInput.current.value);
-        const height = parseInt(this.state.heightInput.current.value);
+        const bombs = bombInput.current.value;
+        const width = parseInt(widthInput.current.value);
+        const height = parseInt(heightInput.current.value);
         const mines = minesweeper({ bombs, width, height});
-        this.props.initialSetup(mines, bombs, {width, height});
+        props.initialSetup(mines, bombs, {width, height});
     }
-
-    render() {
-        return (
+    
+    return (
             <form>
                 <label htmlFor="bombs">Bombs: </label>
                 <input type="number" 
                     name="bombs" 
                     id="bombs" 
-                    ref={this.state.bombInput} 
+                    ref={bombInput} 
                     defaultValue="10"
                     minLength="10"
                     maxLength="100"
-                    onChange={this.validate}
+                    onInput={validate}
                 />
                 <label htmlFor="width">Width: </label>
                 <input type="number"
                     name="width"
                     id="width"
-                    ref={this.state.widthInput}
+                    ref={widthInput}
                     defaultValue="10"
                     minLength="10"
                     maxLength="25"
-                    onChange={this.validate}
+                    onInput={validate}
                 />
                 <label htmlFor="height">Height: </label>
                 <input type="number" 
                     name="height" 
                     id="height"
-                    ref={this.state.heightInput}
+                    ref={heightInput}
                     defaultValue="10"
                     minLength="10"
                     maxLength="25"
-                    onChange={this.validate}
+                    onInput={validate}
                 />
-                {this.state.disabled ? 
+                {disabled ? 
                     <small>
                         Bombs cannot exceed length * width, grid can be only as big as 40 (width) * 25 (height)
                     </small> : null 
                     
                 }
                 <button 
-                    onClick={this.startGame} 
-                    disabled={this.state.disabled}
+                    onClick={startGame} 
+                    disabled={disabled}
                 >New Game</button>
             </form>
         );
-    }
 }
