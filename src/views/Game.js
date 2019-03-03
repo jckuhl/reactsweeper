@@ -22,7 +22,7 @@ export default class Game extends Component {
         face: '😎',
         currentFlag: 0,
         maxFlag: 0,
-        won: false
+        didWin: false
     }
 
     sadface = () => {
@@ -35,7 +35,10 @@ export default class Game extends Component {
     }
 
     initialSetup = (mines, maxFlag, dimensions) => {
-        this.setState({ mines, won: false, maxFlag, 
+        this.setState({ 
+            mines, 
+            didWin: false, 
+            maxFlag, 
             width: dimensions.width, 
             height: dimensions.height,
             face:  '😎'
@@ -57,7 +60,7 @@ export default class Game extends Component {
     uncoverMine = (index) => {
         const mines = this.state.mines;
         mines[index].active = true;
-        this.setState({ mines }, this.win);
+        this.setState({ mines }, this.checkWin);
     }
 
     /**
@@ -115,23 +118,21 @@ export default class Game extends Component {
                 mine.active = true;
             }
         });
-        this.setState({ mines }, this.win);
+        this.setState({ mines }, this.checkWin);
     }
 
-    win = ()=> {
+    checkWin = () => {
         const { mines } = this.state;
         const covered = mines.filter(mine => !mine.active);
         const bombs = mines.filter(mine => mine.bomb);
         if(covered.length === bombs.length) {
             for(let i = 0; i < covered.length; i++) {
                 if(covered[i].position !== bombs[i].position) {
-                    return false;
+                    break;
                 }
             }
-            this.setState({ won: true });
-            return true;
+            this.setState({ didWin: true });
         }
-        return false;
     }
 
     render() {
@@ -146,7 +147,7 @@ export default class Game extends Component {
                     face={this.state.face}
                     flags={flags.current}
                     />
-                { this.state.won ? 
+                { this.state.didWin ? 
                     <p>You won!</p>
                     :
                     <Minefield 
