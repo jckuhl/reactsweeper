@@ -30,6 +30,7 @@ export default function mineSweeperGrid({ bombs, width, height }) {
                 .fill(new Mine({ bomb: true, squares: -1}), 0, bombs)
                 .fill(new Mine({ bomb: false }), bombs);
     return shuffle(grid).map((mine, index) => {
+        mine.position = index;
         if(!mine.bomb) {
 
             const POSITION = {

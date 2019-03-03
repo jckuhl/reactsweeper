@@ -21,7 +21,8 @@ export default class Game extends Component {
         height: 0,
         face: '😎',
         currentFlag: 0,
-        maxFlag: 0
+        maxFlag: 0,
+        won: false
     }
 
     sadface = () => {
@@ -33,12 +34,12 @@ export default class Game extends Component {
         this.setState({ mines });
     }
 
-    coolface = () => {
-        this.setState({ face: '😎' })
-    }
-
-    addMines = (mines) => {
-        this.setState({ mines });
+    initialSetup = (mines, maxFlag, dimensions) => {
+        this.setState({ mines, won: false, maxFlag, 
+            width: dimensions.width, 
+            height: dimensions.height,
+            face:  '😎'
+        });
     }
 
     setFlag = (value, index, flagged) => {
@@ -46,22 +47,6 @@ export default class Game extends Component {
         const mines = this.state.mines;
         mines[index].flagged = !flagged;
         this.setState({ mines })
-    }
-
-    maxFlag = (value) => {
-        this.setState({ maxFlag: value });
-    }
-
-    /**
-     * Set the dimensions of the mine field
-     *
-     * @memberof App
-     */
-    setDimensions = (dimensions) => {
-        this.setState({ 
-            width: parseInt(dimensions.width), 
-            height: parseInt(dimensions.height)
-        });
     }
 
     /**
@@ -72,7 +57,7 @@ export default class Game extends Component {
     uncoverMine = (index) => {
         const mines = this.state.mines;
         mines[index].active = true;
-        this.setState({ mines });
+        this.setState({ mines }, this.win);
     }
 
     /**
@@ -93,10 +78,8 @@ export default class Game extends Component {
             left: index => index - 1
         }
 
-        function clear(index) {
-            let positions = Object.entries(positionFunctions);
-
-            // edge detection
+        function detectEdges(positionFns) {
+            let positions = Object.entries(positionFns);
             if(index >= 0 && index <= width) {
                 positions = positions.filter(([k, v]) => !k.includes('top'));
             }
@@ -109,11 +92,18 @@ export default class Game extends Component {
             if(index >= width * height - width && index < width * height) {
                 positions = positions.filter(([k, v])=> !k.includes('bottom'));
             }
+            return positions;
+        }
 
-            const indices = positions
+        function clear(index) {
+            const indices = detectEdges(positionFunctions)
                 .map(([key, position]) => position(index))
-                .filter(index => !mines[index].active && !mines[index].bomb);
-            return indices;
+                .filter(index => !mines[index].active 
+                                && !mines[index].bomb
+                                && !mines[index].flagged
+                                // && !usedIndex.has(index)
+                );
+            return indices
         }
     
         // grab all the indices that need to be cleared
@@ -125,7 +115,23 @@ export default class Game extends Component {
                 mine.active = true;
             }
         });
-        this.setState({ mines });
+        this.setState({ mines }, this.win);
+    }
+
+    win = ()=> {
+        const { mines } = this.state;
+        const covered = mines.filter(mine => !mine.active);
+        const bombs = mines.filter(mine => mine.bomb);
+        if(covered.length === bombs.length) {
+            for(let i = 0; i < covered.length; i++) {
+                if(covered[i].position !== bombs[i].position) {
+                    return false;
+                }
+            }
+            this.setState({ won: true });
+            return true;
+        }
+        return false;
     }
 
     render() {
@@ -135,25 +141,25 @@ export default class Game extends Component {
         }
         return (
             <GameContainer>
-                <Controls addMines={this.addMines} 
-                    setDimensions={this.setDimensions} 
-                    coolFace={this.coolface}
-                    maxFlag={this.maxFlag}
-                />
+                <Controls initialSetup={this.initialSetup} />
                 <Display mines={this.state.mines} 
                     face={this.state.face}
                     flags={flags.current}
-                />
-                <Minefield 
-                    mines={this.state.mines} 
-                    sadFace={this.sadface}
-                    setFlag={this.setFlag}
-                    flags={flags}
-                    width={this.state.width}
-                    height={this.state.height}
-                    clearBlanks={this.clearBlanks}
-                    uncoverMine={this.uncoverMine}
-                />
+                    />
+                { this.state.won ? 
+                    <p>You won!</p>
+                    :
+                    <Minefield 
+                        mines={this.state.mines} 
+                        sadFace={this.sadface}
+                        setFlag={this.setFlag}
+                        flags={flags}
+                        width={this.state.width}
+                        height={this.state.height}
+                        clearBlanks={this.clearBlanks}
+                        uncoverMine={this.uncoverMine}
+                        />
+                }
             </GameContainer>
         );
     }

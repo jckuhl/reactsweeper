@@ -33,13 +33,10 @@ export default class Controls extends Component {
         event.preventDefault();
         
         const bombs = this.state.bombInput.current.value;
-        const width = this.state.widthInput.current.value;
-        const height = this.state.heightInput.current.value;
+        const width = parseInt(this.state.widthInput.current.value);
+        const height = parseInt(this.state.heightInput.current.value);
         const mines = minesweeper({ bombs, width, height});
-        this.props.addMines(mines);
-        this.props.setDimensions({width, height});
-        this.props.coolFace();
-        this.props.maxFlag(bombs);
+        this.props.initialSetup(mines, bombs, {width, height});
     }
 
     render() {

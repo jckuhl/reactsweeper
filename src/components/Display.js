@@ -32,10 +32,10 @@ export default function Display({ mines, flags, face }) {
     const bombs = mines.filter((mine)=> mine.bomb === true).length;
     return (
         <DisplayContainer>
-            <div className="label">Bombs: </div> 
+            <DisplayLabel>Bombs: </DisplayLabel> 
             <DisplayScore>{bombs}</DisplayScore> 
             <DisplayFace>{face}</DisplayFace> 
-            <div className="label">Flags: </div>
+            <DisplayLabel>Flags: </DisplayLabel>
             <DisplayScore>{flags}</DisplayScore>
         </DisplayContainer>
     );
