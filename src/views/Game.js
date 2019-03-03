@@ -126,7 +126,7 @@ export default class Game extends Component {
                                 && !mines[index].flagged
                                 // && !usedIndex.has(index)
                 );
-            return indices
+            return indices;
         }
     
         // grab all the indices that need to be cleared
