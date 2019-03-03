@@ -21,7 +21,7 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
-export default function App(props) {
+export default function App() {
     return (
         <React.Fragment>
             <GlobalStyle />

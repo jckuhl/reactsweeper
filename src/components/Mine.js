@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { MineContext } from './context';
 
 // 🔥💥
 
@@ -18,38 +19,39 @@ const MineSquare = styled.div`
     border-right: ${props => props.active ? 'solid 1px black;' : 'solid 2px darkgray;'};
 `;
 
-export default function Mine(props) {
+export default function Mine({ mine, position }) {
+
+    const context = useContext(MineContext);
 
     function sweepMine(event) {
         event.preventDefault();
-        const { mine, position, uncoverMine, sadFace, setFlag, didWin } = props;
+        const { didWin, currentFlag, maxFlag } = context.state;
+        const { uncoverMine, sadface, setFlag, clearBlanks } = context.actions;
+
+        // no events if game is won
         if(didWin) return;
+
         // if clicked on and unflagged, explode, reveal blanks, or reveal number
         if (event.type === 'click' && !mine.flagged) {
             uncoverMine(position);
             if(mine.bomb) {
-                sadFace();
+                sadface();
             } else if(mine.squares === 0) {
-                props.clearBlanks(props.position);
-            } else {
-                // console.log('Reveal number')
-                // TODO: Do I need this else?
+                clearBlanks(position);
             }
         } else if (event.type === 'contextmenu') {
-            const { current, max } = props.flags;
             // if uncovered but not flagged, add a flag.
             if(!mine.active && !mine.flagged) {
-                if(current !== max) {
-                    setFlag(current + 1, position, mine.flagged);
+                if(currentFlag !== maxFlag) {
+                    setFlag(currentFlag + 1, position, mine.flagged);
                 }
             } else if(!mine.active && mine.flagged) {
-                setFlag(current - 1, position, mine.flagged);
+                setFlag(currentFlag - 1, position, mine.flagged);
             }
         }
     }
 
     function getColor() {
-        const { mine } = props;
         if(mine.squares === -1 || mine.squares === 0) {
             return;
         } else {
@@ -68,7 +70,6 @@ export default function Mine(props) {
     }
 
     function squareValue() {
-        const { mine } = props;
         if(mine.active) {
             return mine.bomb ? '💣' 
                     : mine.squares === 0 ? '' 
@@ -80,13 +81,13 @@ export default function Mine(props) {
     
     const textColor = getColor();
     return (
-            <MineSquare
-                onClick={sweepMine} 
-                onContextMenu={sweepMine}
-                active={props.mine.active}
-                color={textColor}>
-                { squareValue() }  
-            </MineSquare>
+        <MineSquare
+            onClick={sweepMine} 
+            onContextMenu={sweepMine}
+            active={mine.active}
+            color={textColor}>
+            { squareValue() }  
+        </MineSquare>
     );
 
 }

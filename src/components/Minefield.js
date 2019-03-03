@@ -1,6 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import Mine from './Mine';
+import { MineContext } from './context';
 
 const MineGrid = styled.div`
     display: grid;
@@ -10,28 +11,24 @@ const MineGrid = styled.div`
     grid-template-rows: ${props => `repeat(${props.height}, 1fr)`};
 `;
 
-function Minefield(props) {
+export default function Minefield() {
     const minefieldDiv = useRef(null);
+    const context = useContext(MineContext);
+
     useEffect(()=> {
         const { top, left } = minefieldDiv.current.getBoundingClientRect();
-        props.setWinMessagePosition(top, left);
+        context.actions.setWinMessagePosition(top, left);
     }, []);
+
+    const { mines, width, height } = context.state;
+
     return (
-        <MineGrid width={props.width} height={props.height} ref={minefieldDiv}>
+        <MineGrid width={width} height={height} ref={minefieldDiv}>
             {
-                props.mines.map((mine, index) => (
-                    <Mine mine={mine} key={index} position={index}
-                        sadFace={props.sadFace}
-                        setFlag={props.setFlag}
-                        flags={props.flags}
-                        clearBlanks={props.clearBlanks}
-                        uncoverMine={props.uncoverMine}
-                        didWin={props.didWin}
-                    />
+                mines.map((mine, index) => (
+                    <Mine mine={mine} key={index} position={index}/>
                 ))
             }
         </MineGrid>
     );
 }
-
-export default Minefield;

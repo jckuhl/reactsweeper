@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { Provider } from '../src/components/context';
 
 ReactDOM.render(
-    <App/>, 
+    <Provider>
+        <App/> 
+    </Provider>,
     document.getElementById('root')
 );
 

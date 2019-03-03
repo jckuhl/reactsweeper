@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { MineContext } from './context';
 
 const DisplayContainer = styled.div`
     display: grid;
@@ -28,7 +29,9 @@ const DisplayFace = styled.div`
     height: 30px;
 `;
 
-export default function Display({ mines, flags, face }) {
+export default function Display(props) {
+    const context = useContext(MineContext);
+    const { mines, face, currentFlag } = context.state;
     const bombs = mines.filter((mine)=> mine.bomb === true).length;
     return (
         <DisplayContainer>
@@ -36,7 +39,7 @@ export default function Display({ mines, flags, face }) {
             <DisplayScore>{bombs}</DisplayScore> 
             <DisplayFace>{face}</DisplayFace> 
             <DisplayLabel>Flags: </DisplayLabel>
-            <DisplayScore>{flags}</DisplayScore>
+            <DisplayScore>{currentFlag}</DisplayScore>
         </DisplayContainer>
     );
 }
