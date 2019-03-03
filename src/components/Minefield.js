@@ -21,6 +21,7 @@ function Minefield(props) {
                         flags={props.flags}
                         clearBlanks={props.clearBlanks}
                         uncoverMine={props.uncoverMine}
+                        didWin={props.didWin}
                     />
                 ))
             }

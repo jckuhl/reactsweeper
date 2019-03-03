@@ -6,10 +6,15 @@ import Display from '../components/Display';
 
 const GameContainer = styled.div`
     display: flex;
+    position: relative;
     flex-direction: column;
     width: 40%;
     margin: 1rem auto;
     justify-content: center;
+`;
+
+const WinMessage = styled.div`
+    position: absolute;
 `;
 
 export default class Game extends Component {
@@ -22,7 +27,7 @@ export default class Game extends Component {
         face: '😎',
         currentFlag: 0,
         maxFlag: 0,
-        didWin: false
+        didWin: true
     }
 
     sadface = () => {
@@ -146,21 +151,22 @@ export default class Game extends Component {
                 <Display mines={this.state.mines} 
                     face={this.state.face}
                     flags={flags.current}
-                    />
+                />
                 { this.state.didWin ? 
-                    <p>You won!</p>
-                    :
-                    <Minefield 
-                        mines={this.state.mines} 
-                        sadFace={this.sadface}
-                        setFlag={this.setFlag}
-                        flags={flags}
-                        width={this.state.width}
-                        height={this.state.height}
-                        clearBlanks={this.clearBlanks}
-                        uncoverMine={this.uncoverMine}
-                        />
+                    <WinMessage>You won!</WinMessage> : 
+                    null
                 }
+                <Minefield 
+                    mines={this.state.mines} 
+                    sadFace={this.sadface}
+                    setFlag={this.setFlag}
+                    flags={flags}
+                    width={this.state.width}
+                    height={this.state.height}
+                    clearBlanks={this.clearBlanks}
+                    uncoverMine={this.uncoverMine}
+                    didWin={this.state.didWin}
+                />
             </GameContainer>
         );
     }

@@ -22,7 +22,8 @@ export default function Mine(props) {
 
     function sweepMine(event) {
         event.preventDefault();
-        const { mine, position, uncoverMine, sadFace, setFlag } = props;
+        const { mine, position, uncoverMine, sadFace, setFlag, didWin } = props;
+        if(didWin) return;
         // if clicked on and unflagged, explode, reveal blanks, or reveal number
         if (event.type === 'click' && !mine.flagged) {
             uncoverMine(position);
