@@ -2,7 +2,7 @@ import React, { useState, useRef, useContext } from 'react';
 import minesweeper from './../models/minesweeper';
 import { MineContext } from './context';
 
-export default function Controls(props) {
+export default function Controls() {
     const bombInput = useRef(null);
     const widthInput = useRef(null);
     const heightInput = useRef(null);

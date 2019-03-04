@@ -19,18 +19,21 @@ const WinMessage = styled.div`
     left: ${props => props.position ? props.position.left + 'px' : 0};
     font-size: 3rem;
     text-align: center;
-    visibility: ${props => props.visible ? 'visible': 'hidden'}
+    visibility: ${props => props.visible ? 'visible': 'hidden'};
+    text-shadow: ${ props => props.winMessage.includes('win') ? `0px 0px 10px blue;` : `0px 0px 10px red;` };
 `;
 
 export default function Game() {
-    const { didWin, winMessageDiv, winMessagePosition } = useContext(MineContext).state;
+    const { didWin, winMessageDiv, winMessagePosition, winMessage } = useContext(MineContext).state;
     return (
         <GameContainer>
             <Controls />
             <Display />
-            <WinMessage position={winMessagePosition} visible={didWin}
-                ref={winMessageDiv}>
-                You won!
+            <WinMessage position={winMessagePosition} 
+                visible={didWin}
+                ref={winMessageDiv}
+                winMessage={winMessage}>
+                {winMessage}
             </WinMessage>
             <Minefield />
         </GameContainer>
