@@ -80,16 +80,16 @@ export default function Controls() {
                 inputAction={validate}>
                 Height: 
             </ControlInput>
+            <NewGameBtn 
+                onClick={startGame} 
+                disabled={disabled}
+                >New Game</NewGameBtn>
             {disabled ? 
                 <small>
                     Bombs cannot exceed length * width, grid can be only as big as 40 (width) * 25 (height)
                 </small> : null 
                 
             }
-            <NewGameBtn 
-                onClick={startGame} 
-                disabled={disabled}
-                >New Game</NewGameBtn>
         </ControlForm>
     );
 }
