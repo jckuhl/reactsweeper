@@ -25,6 +25,10 @@ const GlobalStyle = createGlobalStyle`
     body {
         font-family: 'ZCOOL QingKe HuangYou', cursive;
     }
+    
+    button a, button a:visited, button a:link {
+        text-decoration: none;
+    }
 `;
 
 export default function App() {

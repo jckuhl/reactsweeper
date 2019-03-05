@@ -3,12 +3,7 @@ import styled from 'styled-components';
 import minesweeper from './../models/minesweeper';
 import { MineContext } from './context';
 import ControlInput from './ControlInput';
-
-const NewGameBtn = styled.button`
-    display: block;
-    font-family: 'ZCOOL QingKe HuangYou', cursive;
-    font-size: 1rem;
-`;
+import GameButton from './Button';
 
 const ControlForm = styled.form`
     display: flex;
@@ -80,10 +75,11 @@ export default function Controls() {
                 inputAction={validate}>
                 Height: 
             </ControlInput>
-            <NewGameBtn 
-                onClick={startGame} 
+            <GameButton
+                clickAction={startGame}
+                justify={'right'}
                 disabled={disabled}
-                >New Game</NewGameBtn>
+                >New Game</GameButton>
             {disabled ? 
                 <small>
                     Bombs cannot exceed length * width, grid can be only as big as 40 (width) * 25 (height)

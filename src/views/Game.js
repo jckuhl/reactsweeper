@@ -5,7 +5,7 @@ import Minefield from '../components/Minefield';
 import Display from '../components/Display';
 import { MineContext } from '../components/context';
 
-const GameContainer = styled.div`
+const GameContainer = styled.section`
     display: flex;
     flex-direction: column;
     width: 40%;
