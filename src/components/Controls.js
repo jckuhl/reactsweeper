@@ -1,6 +1,20 @@
 import React, { useState, useRef, useContext } from 'react';
+import styled from 'styled-components';
 import minesweeper from './../models/minesweeper';
 import { MineContext } from './context';
+import ControlInput from './ControlInput';
+
+const NewGameBtn = styled.button`
+    display: block;
+    font-family: 'ZCOOL QingKe HuangYou', cursive;
+    font-size: 1rem;
+`;
+
+const ControlForm = styled.form`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+`;
 
 export default function Controls() {
     const bombInput = useRef(null);
@@ -41,47 +55,41 @@ export default function Controls() {
     }
 
     return (
-        <form>
-            <label htmlFor="bombs">Bombs: </label>
-            <input type="number" 
-                name="bombs" 
-                id="bombs" 
-                ref={bombInput} 
-                defaultValue="10"
-                minLength="10"
-                maxLength="100"
-                onInput={validate}
-                />
-            <label htmlFor="width">Width: </label>
-            <input type="number"
-                name="width"
-                id="width"
+        <ControlForm>
+            <ControlInput id={'bombs'}
+                max={100}
+                min={10}
+                ref={bombInput}
+                default={10}
+                inputAction={validate}>
+                Bombs: 
+            </ControlInput>
+            <ControlInput id={'width'}
+                max={25}
+                min={10}
                 ref={widthInput}
-                defaultValue="10"
-                minLength="10"
-                maxLength="25"
-                onInput={validate}
-                />
-            <label htmlFor="height">Height: </label>
-            <input type="number" 
-                name="height" 
-                id="height"
+                default={10}
+                inputAction={validate}>
+                Width: 
+            </ControlInput>
+            <ControlInput id={'height'}
+                max={25}
+                min={10}
                 ref={heightInput}
-                defaultValue="10"
-                minLength="10"
-                maxLength="25"
-                onInput={validate}
-                />
+                default={10}
+                inputAction={validate}>
+                Height: 
+            </ControlInput>
             {disabled ? 
                 <small>
                     Bombs cannot exceed length * width, grid can be only as big as 40 (width) * 25 (height)
                 </small> : null 
                 
             }
-            <button 
+            <NewGameBtn 
                 onClick={startGame} 
                 disabled={disabled}
-                >New Game</button>
-        </form>
+                >New Game</NewGameBtn>
+        </ControlForm>
     );
 }

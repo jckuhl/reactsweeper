@@ -7,6 +7,8 @@ import Title from './components/Title';
 
 const GlobalStyle = createGlobalStyle`
     @import url('https://fonts.googleapis.com/css?family=Orbitron');
+    @import url('https://fonts.googleapis.com/css?family=ZCOOL+QingKe+HuangYou');
+    
     margin: 0;
     padding: 0;
     font-size: 16px;
@@ -18,6 +20,10 @@ const GlobalStyle = createGlobalStyle`
         -moz-box-sizing:border-box; 
         -webkit-box-sizing:border-box; 
         -ms-box-sizing:border-box;
+    }
+
+    body {
+        font-family: 'ZCOOL QingKe HuangYou', cursive;
     }
 `;
 
