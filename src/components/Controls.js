@@ -88,7 +88,6 @@ export default function Controls() {
                 <small>
                     Bombs cannot exceed length * width, grid can be only as big as 40 (width) * 25 (height)
                 </small> : null 
-                
             }
         </ControlForm>
     );
