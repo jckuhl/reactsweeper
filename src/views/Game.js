@@ -21,7 +21,7 @@ export default function Game() {
         <GameContainer>
             <Controls />
             <Display />
-            { clockActive ? <Clock /> : null}
+            <Clock active={clockActive} />
             <WinMessage position={winMessagePosition} 
                 visible={didWin}
                 ref={winMessageDiv}

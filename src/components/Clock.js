@@ -7,7 +7,7 @@ const ClockDiv = styled.div`
 
 export default class Clock extends Component {
     state = {
-        start: Date.now(),
+        start: 0,
         time: 0
     }
 
@@ -21,15 +21,22 @@ export default class Clock extends Component {
         return `${minutes < 10 ? '0' + minutes: minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
     }
 
-    componentDidMount() {
-        this.timeInterval = setInterval(()=> {
-            let time = Math.floor((Date.now() - this.state.start)/1000);
-            this.setState({time});
-        });
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.timeInterval);
+    componentDidUpdate(prevProps) {
+        if(this.props.active) {
+            if(this.state.start === 0) {
+                this.setState({ start: Date.now() })
+            }
+            if(this.timeInterval === undefined) {
+                this.timeInterval = setInterval(()=> {
+                    let time = Math.floor((Date.now() - this.state.start)/1000);
+                    this.setState({time});
+                });
+            }
+        } else if(prevProps.active !== this.props.active) {
+            clearInterval(this.timeInterval);
+            this.timeInterval = undefined;
+            this.setState({ start: 0 })
+        }
     }
 
     render() {
