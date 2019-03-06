@@ -78,8 +78,9 @@ export default function Controls() {
             <GameButton
                 clickAction={startGame}
                 justify={'right'}
-                disabled={disabled}
-                >New Game</GameButton>
+                disabled={disabled}>
+                New Game
+            </GameButton>
             {disabled ? 
                 <small>
                     Bombs cannot exceed length * width, grid can be only as big as 40 (width) * 25 (height)

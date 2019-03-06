@@ -16,12 +16,12 @@ const Btn = styled.button`
     }};
     padding: ${props => props.primary ? '1rem': '0.25rem'};
     text-decoration: ${props => props.primary ? 'underline purple': 'none'};
+    font-size: ${props => props.primary ? '2rem': '1rem'};
     width: max-content;
     text-align: center;
     border: 2px solid black;
     display: block;
     font-family: 'Orbitron', sans-serif;
-    font-size: ${props => props.primary ? '2rem': '1rem'};
     cursor: pointer;
 
     &:hover:enabled {
