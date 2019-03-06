@@ -17,7 +17,8 @@ export class Provider extends Component {
             left: 0
         },
         winMessageDiv: React.createRef(),
-        winMessage: 'You win!'
+        winMessage: 'You win!',
+        clockActive: false
     }
 
     sadface = () => {
@@ -26,7 +27,7 @@ export class Provider extends Component {
             mine.active = true;
             return mine;
         });
-        this.setState({ mines, didWin: true, winMessage: 'You lose!' });
+        this.setState({ mines, didWin: true, winMessage: 'You lose!', clockActive: false });
     }
 
     initialSetup = (mines, maxFlag, dimensions) => {
@@ -36,7 +37,8 @@ export class Provider extends Component {
             maxFlag, 
             width: dimensions.width, 
             height: dimensions.height,
-            face:  '😎'
+            face:  '😎',
+            clockActive: true
         });
     }
 
@@ -133,7 +135,7 @@ export class Provider extends Component {
                     break;
                 }
             }
-            this.setState({ didWin: true, winMessage: 'You win!' });
+            this.setState({ didWin: true, winMessage: 'You win!', clockActive: false });
         }
     }
 

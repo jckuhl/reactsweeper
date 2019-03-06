@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Controls from '../components/Controls';
 import Minefield from '../components/Minefield';
 import Display from '../components/Display';
+import Clock from '../components/Clock'
 import WinMessage from '../components/WinMessage';
 import { MineContext } from '../components/context';
 
@@ -15,11 +16,12 @@ const GameContainer = styled.section`
 `;
 
 export default function Game() {
-    const { didWin, winMessageDiv, winMessagePosition, winMessage } = useContext(MineContext).state;
+    const { didWin, winMessageDiv, winMessagePosition, winMessage, clockActive } = useContext(MineContext).state;
     return (
         <GameContainer>
             <Controls />
             <Display />
+            { clockActive ? <Clock /> : null}
             <WinMessage position={winMessagePosition} 
                 visible={didWin}
                 ref={winMessageDiv}

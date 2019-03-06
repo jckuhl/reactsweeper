@@ -48,7 +48,7 @@ export default function App() {
             <GlobalStyle />
             <FlexContainer>
                 <FlexContent>
-                    <Title/>
+                    <Title />
                     <BrowserRouter>
                         <React.Fragment>
                             <Route path="/" exact component={Home} />
