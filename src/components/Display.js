@@ -9,6 +9,8 @@ const DisplayContainer = styled.div`
     background: darkgray;
     align-items: center;
     justify-content: space-between;
+    margin: 0 auto;
+    width: 40%;
     height: 30px;
 `;
 
@@ -53,7 +55,7 @@ export default function Display(props) {
                 <div>Bombs: </div> 
                 <DisplayScore>{bombs}</DisplayScore> 
             </DisplayLabel>
-            <DisplayFace>{face.trim()}</DisplayFace> 
+            <DisplayFace>{face}</DisplayFace> 
             <DisplayLabel justify={'right'}>
                 <div>Flags: </div>
                 <DisplayScore>{currentFlag}</DisplayScore>

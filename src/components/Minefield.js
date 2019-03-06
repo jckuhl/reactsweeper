@@ -7,8 +7,8 @@ const MineGrid = styled.div`
     display: grid;
     width: auto;
     margin: 0 auto;
-    grid-template-columns: ${props => `repeat(${props.gridwidth}, 1fr)`};
-    grid-template-rows: ${props => `repeat(${props.gridheight}, 1fr)`};
+    grid-template-columns: ${props => `repeat(${props.gridwidth}, 1fr);`};
+    grid-template-rows: ${props => `repeat(${props.gridheight}, 1fr);`};
 `;
 
 export default function Minefield() {

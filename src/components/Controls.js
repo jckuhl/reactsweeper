@@ -9,9 +9,12 @@ const ControlForm = styled.form`
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    width: 40%;
+    margin: 0 auto;
 `;
 
 export default function Controls() {
+    const [ MINBOMB, MAXBOMB, MINWIDTH, MAXWIDTH, MINHEIGHT, MAXHEIGHT ] = [1, 100, 10, 40, 10, 25];
     const bombInput = useRef(null);
     const widthInput = useRef(null);
     const heightInput = useRef(null);
@@ -27,13 +30,13 @@ export default function Controls() {
         let invalidWidth = false;
         let invalidHeight = false;
 
-        if(bombs < 1 || bombs > (width * height)) {
+        if(bombs < MINBOMB || bombs > (width * height)) {
             invalidBombs = true;
         }
-        if(width < 10 || width > 25) {
+        if(width < MINWIDTH || width > MAXWIDTH) {
             invalidWidth = true;
         }
-        if(height < 10 || height > 25) {
+        if(height < MINHEIGHT || height > MAXHEIGHT) {
             invalidHeight = true;
         }
         setDisabled(!(!invalidBombs && !invalidWidth && !invalidHeight));
@@ -52,24 +55,24 @@ export default function Controls() {
     return (
         <ControlForm>
             <ControlInput id={'bombs'}
-                max={100}
-                min={10}
+                max={MAXBOMB}
+                min={MINBOMB}
                 ref={bombInput}
                 default={10}
                 inputAction={validate}>
                 Bombs: 
             </ControlInput>
             <ControlInput id={'width'}
-                max={25}
-                min={10}
+                max={MAXWIDTH}
+                min={MINWIDTH}
                 ref={widthInput}
                 default={10}
                 inputAction={validate}>
                 Width: 
             </ControlInput>
             <ControlInput id={'height'}
-                max={25}
-                min={10}
+                max={MAXHEIGHT}
+                min={MINHEIGHT}
                 ref={heightInput}
                 default={10}
                 inputAction={validate}>
@@ -83,7 +86,7 @@ export default function Controls() {
             </GameButton>
             {disabled ? 
                 <small>
-                    Bombs cannot exceed length * width, grid can be only as big as 40 (width) * 25 (height)
+                    Bombs cannot exceed length * width, grid can be only as big as {MAXWIDTH} (width) * {MAXHEIGHT} (height)
                 </small> : null 
             }
         </ControlForm>

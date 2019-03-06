@@ -1,9 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import Home from './views/Home';
 import Game from './views/Game';
 import Title from './components/Title';
+import Copy from './components/Copy';
 
 const GlobalStyle = createGlobalStyle`
     @import url('https://fonts.googleapis.com/css?family=Orbitron');
@@ -31,17 +32,32 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
+const FlexContainer = styled.section`
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+`;
+
+const FlexContent = styled.div`
+    flex: 1 0 auto;
+`;
+
 export default function App() {
     return (
         <React.Fragment>
             <GlobalStyle />
-            <Title/>
-            <BrowserRouter>
-                <React.Fragment>
-                    <Route path="/" exact component={Home} />
-                    <Route path="/game" component={Game} />
-                </React.Fragment>
-            </BrowserRouter>
+            <FlexContainer>
+                <FlexContent>
+                    <Title/>
+                    <BrowserRouter>
+                        <React.Fragment>
+                            <Route path="/" exact component={Home} />
+                            <Route path="/game" component={Game} />
+                        </React.Fragment>
+                    </BrowserRouter>
+                </FlexContent>
+                <Copy />
+            </FlexContainer>
         </React.Fragment>
     );
 }
