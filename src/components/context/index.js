@@ -38,8 +38,9 @@ export class Provider extends Component {
             width: dimensions.width, 
             height: dimensions.height,
             face:  '😎',
-            clockActive: true
-        });
+            clockActive: false
+            // set clockActive to false and back to true to reset the clock
+        }, ()=> this.setState({ clockActive: true }));
     }
 
     setWinMessagePosition = (top, left) => {
