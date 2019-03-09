@@ -25,14 +25,22 @@ export default function Mine({ mine, position }) {
 
     function sweepMine(event) {
         event.preventDefault();
-        const { didWin, currentFlag, maxFlag } = context.state;
-        const { uncoverMine, sadface, setFlag, clearBlanks } = context.actions;
+        const { didWin, currentFlag, maxFlag, clicks } = context.state;
+        const { uncoverMine, sadface, setFlag, clearBlanks, setClicks, resetMines } = context.actions;
 
         // no events if game is won
         if(didWin) return;
 
+        setClicks();
+
         // if clicked on and unflagged, explode, reveal blanks, or reveal number
         if (event.type === 'click' && !mine.flagged) {
+            // avoid a bomb on a first click
+            console.log(clicks);
+            if(mine.bomb && clicks === 0) {
+                resetMines(position);
+                return;
+            }
             uncoverMine(position);
             if(mine.bomb) {
                 sadface();

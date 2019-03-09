@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import flatten from '../../models/flatten';
+import minesweeper from '../../models/minesweeper';
 
 export const MineContext = React.createContext();
 
@@ -18,7 +20,8 @@ export class Provider extends Component {
         },
         winMessageDiv: React.createRef(),
         winMessage: 'You win!',
-        clockActive: false
+        clockActive: false,
+        clicks: 0
     }
 
     sadface = () => {
@@ -30,14 +33,35 @@ export class Provider extends Component {
         this.setState({ mines, didWin: true, winMessage: 'You lose!', clockActive: false });
     }
 
+    setClicks = () => {
+        let clicks = this.state.clicks;
+        clicks += 1;
+        this.setState({ clicks });
+    }
+
+    resetMines = (exclude) => {
+        const { bombs, width, height } = this.state;
+        const mines = minesweeper({ bombs, width, height }, exclude);
+        this.setState({ mines }, ()=> {
+            this.forceUpdate(()=> {
+                this.uncoverMine(exclude);
+                if(this.state.mines[exclude].squares === 0) {
+                    this.clearBlanks(exclude);
+                }
+            })
+        });
+    }
+
     initialSetup = (mines, maxFlag, dimensions) => {
         this.setState({ 
             mines, 
             didWin: false, 
-            maxFlag, 
+            maxFlag,
+            bombs: maxFlag,
             width: dimensions.width, 
             height: dimensions.height,
             face:  '😎',
+            clicks: 0,
             clockActive: false
             // set clockActive to false and back to true to reset the clock
         }, ()=> this.setState({ clockActive: true }));
@@ -73,8 +97,9 @@ export class Provider extends Component {
      *
      * @memberof App
      */
-    clearBlanks = (index) => {
+    clearBlanks = (clickedIndex) => {
         const { mines, width, height } = this.state;
+
         const positionFunctions = {
             topleft: index => index - width - 1,
             top: index => index - width,
@@ -86,7 +111,7 @@ export class Provider extends Component {
             left: index => index - 1
         }
 
-        function detectEdges(positionFns) {
+        function detectEdges(positionFns, index) {
             let positions = Object.entries(positionFns);
             if(index >= 0 && index <= width) {
                 positions = positions.filter(([k, v]) => !k.includes('top'));
@@ -103,19 +128,26 @@ export class Provider extends Component {
             return positions;
         }
 
-        function clear(index) {
-            const indices = detectEdges(positionFunctions)
-                .map(([key, position]) => position(index))
-                .filter(index => !mines[index].active 
-                                && !mines[index].bomb
-                                && !mines[index].flagged
-                                // && !usedIndex.has(index)
-                );
-            return indices;
+        function clear(indicesArray) {
+            const indicesToBeCleared = flatten(indicesArray.map((index) => {
+                return detectEdges(positionFunctions, index)
+                        .map(([key, position])=> { 
+                            return position(index)
+                        }).filter(index => {
+                            return !mines[index].active && !mines[index].flagged && !mines[index].bomb;
+                        });
+            }));
+            console.log(indicesToBeCleared)
+            if(indicesToBeCleared.length === 0) {
+                return indicesArray
+            } else {
+                return indicesArray.concat(indicesToBeCleared);
+            }
         }
     
         // grab all the indices that need to be cleared
-        const indices = clear(index);
+        const indices = clear([clickedIndex]);
+        console.log(indices);
 
         // set them to active and set state
         mines.forEach((mine, index) => {
@@ -150,7 +182,9 @@ export class Provider extends Component {
                     setWinMessagePosition: this.setWinMessagePosition,
                     setFlag: this.setFlag,
                     uncoverMine: this.uncoverMine,
-                    clearBlanks: this.clearBlanks
+                    clearBlanks: this.clearBlanks,
+                    setClicks: this.setClicks,
+                    resetMines: this.resetMines
                 }
             }}>
                 {this.props.children}
