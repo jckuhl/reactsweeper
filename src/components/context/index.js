@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import flatten from '../../models/flatten';
 import minesweeper from '../../models/minesweeper';
 
 export const MineContext = React.createContext();
@@ -10,7 +9,7 @@ export class Provider extends Component {
         bombs: undefined,
         width: 0,
         height: 0,
-        face: '😎',
+        face: '🙂',
         currentFlag: 0,
         maxFlag: 0,
         didWin: false,
@@ -60,7 +59,7 @@ export class Provider extends Component {
             bombs: maxFlag,
             width: dimensions.width, 
             height: dimensions.height,
-            face:  '😎',
+            face:  '🙂',
             clicks: 0,
             clockActive: false
             // set clockActive to false and back to true to reset the clock
@@ -99,7 +98,6 @@ export class Provider extends Component {
      */
     clearBlanks = (clickedIndex) => {
         const { mines, width, height } = this.state;
-        const clearedIndicies = new Set();
 
         const positionFunctions = {
             topleft: index => index - width - 1,
@@ -129,14 +127,25 @@ export class Provider extends Component {
             return positions;
         }
 
+        /**
+         * Recursive function that calculates which indices on the grid need to be cleared 
+         * when a blank is clicked.
+         *
+         * @param { Array } indicesArray An array of indices that need to be cleared
+         * @returns { Array }An array of indices to be cleared or it calls itself to add more indices
+         */
         function clear(indicesArray) {
             const numberedSquares = new Set();
             const indicesToBeCleared = [];
             for(let index = 0; index < indicesArray.length; index++) {
                 const positionFns = detectEdges(positionFunctions, indicesArray[index]);
+                // I need key in order to destructure and grab value, which is the function
+                // eslint-disable-next-line
                 for(let [key, positionFn] of positionFns) {
                     const position = positionFn(indicesArray[index]);
                     if(mines[position].squares >= 1) {
+                        // set numbered squares aside and clear them
+                        // without using them to calculate further clears
                         numberedSquares.add(position);
                     } else if(!mines[position].active 
                         && !mines[position].flagged
@@ -147,7 +156,6 @@ export class Provider extends Component {
                         }
                 }
             }
-            console.log(indicesToBeCleared);
             if(indicesToBeCleared.length === 0) {
                 return indicesArray.concat(...numberedSquares);
             } else {
@@ -176,7 +184,7 @@ export class Provider extends Component {
                     break;
                 }
             }
-            this.setState({ didWin: true, winMessage: 'You win!', clockActive: false });
+            this.setState({ didWin: true, winMessage: 'You win!', clockActive: false, face: '😎' });
         }
     }
 

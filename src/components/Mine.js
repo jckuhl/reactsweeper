@@ -36,7 +36,6 @@ export default function Mine({ mine, position }) {
         // if clicked on and unflagged, explode, reveal blanks, or reveal number
         if (event.type === 'click' && !mine.flagged) {
             // avoid a bomb on a first click
-            console.log(clicks);
             if(mine.bomb && clicks === 0) {
                 resetMines(position);
                 return;

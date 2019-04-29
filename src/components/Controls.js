@@ -58,7 +58,7 @@ export default function Controls() {
                 max={MAXBOMB}
                 min={MINBOMB}
                 ref={bombInput}
-                default={1}
+                default={10}
                 inputAction={validate}>
                 Bombs: 
             </ControlInput>
