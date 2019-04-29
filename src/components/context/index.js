@@ -130,24 +130,26 @@ export class Provider extends Component {
         }
 
         function clear(indicesArray) {
-            const numberedSquare = [];
-            const indicesToBeCleared = flatten(indicesArray.map((index) => {
-                return detectEdges(positionFunctions, index)
-                        .map(([key, position])=> {
-                            return position(index)
-                        }).filter(index => {
-                            if(mines[index].squares >= 1) {
-                                numberedSquare.push(index);
-                            }
-                            return !mines[index].active 
-                                && !mines[index].flagged 
-                                && !mines[index].bomb 
-                                && !mines[index].squares >= 1
-                                && !indicesArray.includes(index);
-                        });
-            }));
+            const numberedSquares = new Set();
+            const indicesToBeCleared = [];
+            for(let index = 0; index < indicesArray.length; index++) {
+                const positionFns = detectEdges(positionFunctions, indicesArray[index]);
+                for(let [key, positionFn] of positionFns) {
+                    const position = positionFn(indicesArray[index]);
+                    if(mines[position].squares >= 1) {
+                        numberedSquares.add(position);
+                    } else if(!mines[position].active 
+                        && !mines[position].flagged
+                        && !mines[position].squares >= 1
+                        && !indicesArray.includes(position)
+                        && !indicesToBeCleared.includes(position) ) {
+                            indicesToBeCleared.push(position);
+                        }
+                }
+            }
+            console.log(indicesToBeCleared);
             if(indicesToBeCleared.length === 0) {
-                return indicesArray.concat(numberedSquare);
+                return indicesArray.concat(...numberedSquares);
             } else {
                 return clear(indicesArray.concat(indicesToBeCleared));
             }
