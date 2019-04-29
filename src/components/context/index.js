@@ -24,7 +24,7 @@ export class Provider extends Component {
     }
 
     sadface = () => {
-        this.setState({ face: '🥺' })
+        this.setState({ face: '😢' })
         const mines = this.state.mines.map(mine => {
             mine.active = true;
             return mine;
