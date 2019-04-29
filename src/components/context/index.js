@@ -99,6 +99,7 @@ export class Provider extends Component {
      */
     clearBlanks = (clickedIndex) => {
         const { mines, width, height } = this.state;
+        const clearedIndicies = new Set();
 
         const positionFunctions = {
             topleft: index => index - width - 1,
@@ -129,26 +130,31 @@ export class Provider extends Component {
         }
 
         function clear(indicesArray) {
+            const numberedSquare = [];
             const indicesToBeCleared = flatten(indicesArray.map((index) => {
                 return detectEdges(positionFunctions, index)
-                        .map(([key, position])=> { 
+                        .map(([key, position])=> {
                             return position(index)
                         }).filter(index => {
-                            return !mines[index].active && !mines[index].flagged && !mines[index].bomb;
+                            if(mines[index].squares >= 1) {
+                                numberedSquare.push(index);
+                            }
+                            return !mines[index].active 
+                                && !mines[index].flagged 
+                                && !mines[index].bomb 
+                                && !mines[index].squares >= 1
+                                && !indicesArray.includes(index);
                         });
             }));
-            console.log(indicesToBeCleared)
             if(indicesToBeCleared.length === 0) {
-                return indicesArray
+                return indicesArray.concat(numberedSquare);
             } else {
-                return indicesArray.concat(indicesToBeCleared);
+                return clear(indicesArray.concat(indicesToBeCleared));
             }
         }
     
         // grab all the indices that need to be cleared
         const indices = clear([clickedIndex]);
-        console.log(indices);
-
         // set them to active and set state
         mines.forEach((mine, index) => {
             if(indices.includes(index)) {
