@@ -8,9 +8,18 @@ import GameButton from './Button';
 const ControlForm = styled.form`
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    width: 40%;
+    flex-direction: column;
+    justify-content: center;
+    width: 80%;
     margin: 0 auto;
+    text-align: center;
+
+    @media(min-width: 1024px) {
+        flex-direction: row;
+        justify-content: space-around;
+        width: 40%;
+        text-align: right;
+    }
 `;
 
 export default function Controls() {

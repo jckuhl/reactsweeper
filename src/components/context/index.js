@@ -181,7 +181,7 @@ export class Provider extends Component {
         if(covered.length === bombs.length) {
             for(let i = 0; i < covered.length; i++) {
                 if(covered[i].position !== bombs[i].position) {
-                    break;
+                    return;
                 }
             }
             this.setState({ didWin: true, winMessage: 'You win!', clockActive: false, face: '😎' });

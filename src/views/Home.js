@@ -6,9 +6,13 @@ import GameButton from './../components/Button';
 const Introduction = styled.section`
     @import url('https://fonts.googleapis.com/css?family=Roboto');
     font-family: 'Roboto', sans-serif;
-    width: 50%;
     text-align: justify;
     margin: 0 auto;
+    width: 80%;
+
+    @media (min-width: 800px) {
+        width: 50%
+    }
 `;
 
 export default function Home(props) {

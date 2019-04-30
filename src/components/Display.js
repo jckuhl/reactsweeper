@@ -10,8 +10,12 @@ const DisplayContainer = styled.div`
     align-items: center;
     justify-content: space-between;
     margin: 0 auto;
-    width: 40%;
+    width: 90%;
     height: 30px;
+
+    @media (min-width: 550px) {
+        width: 40%;
+    }
 `;
 
 const DisplayScore = styled.span`

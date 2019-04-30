@@ -33,6 +33,10 @@ const Btn = styled.button`
         border: 2px solid grey;
         cursor: not-allowed;
     }
+
+    @media (max-width: 1050px) {
+        margin: 0 auto;
+    }
 `;
 
 export default function GameButton(props) {
