@@ -99,7 +99,7 @@ export class Provider extends Component {
     clearBlanks = (clickedIndex) => {
         const { mines, width, height } = this.state;
 
-        const positionFunctions = {
+        const adjacentSquareFunctions = {
             topleft: index => index - width - 1,
             top: index => index - width,
             topright: index => index - width + 1,
@@ -110,9 +110,9 @@ export class Provider extends Component {
             left: index => index - 1
         }
 
-        function detectEdges(positionFns, index) {
-            let positions = Object.entries(positionFns);
-            if(index >= 0 && index <= width) {
+        function detectEdges(adjacentSquareFns, index) {
+            let positions = Object.entries(adjacentSquareFns);
+            if(index >= 0 && index < width) {
                 positions = positions.filter(([k, v]) => !k.includes('top'));
             }
             if(index % width === 0) {
@@ -134,40 +134,40 @@ export class Provider extends Component {
          * @param { Array } indicesArray An array of indices that need to be cleared
          * @returns { Array }An array of indices to be cleared or it calls itself to add more indices
          */
-        function clear(indicesArray) {
+        function getAllAdjacentSquares(indicesArray) {
             const numberedSquares = new Set();
             const indicesToBeCleared = [];
             for(let index = 0; index < indicesArray.length; index++) {
-                const positionFns = detectEdges(positionFunctions, indicesArray[index]);
+                const adjacentSquareFns = detectEdges(adjacentSquareFunctions, indicesArray[index]);
                 // I need key in order to destructure and grab value, which is the function
                 // eslint-disable-next-line
-                for(let [key, positionFn] of positionFns) {
-                    const position = positionFn(indicesArray[index]);
-                    if(mines[position].squares >= 1) {
+                for(let [key, findAdjacentSquare] of adjacentSquareFns) {
+                    const adjacentSquare = findAdjacentSquare(indicesArray[index]);
+                    if(mines[adjacentSquare].squares >= 1) {
                         // set numbered squares aside and clear them
                         // without using them to calculate further clears
-                        numberedSquares.add(position);
-                    } else if(!mines[position].active 
-                        && !mines[position].flagged
-                        && !mines[position].squares >= 1
-                        && !indicesArray.includes(position)
-                        && !indicesToBeCleared.includes(position) ) {
-                            indicesToBeCleared.push(position);
+                        numberedSquares.add(adjacentSquare);
+                    } else if(!mines[adjacentSquare].active 
+                        && !mines[adjacentSquare].flagged
+                        && !mines[adjacentSquare].squares >= 1
+                        && !indicesArray.includes(adjacentSquare)
+                        && !indicesToBeCleared.includes(adjacentSquare) ) {
+                            indicesToBeCleared.push(adjacentSquare);
                         }
                 }
             }
             if(indicesToBeCleared.length === 0) {
                 return indicesArray.concat(...numberedSquares);
             } else {
-                return clear(indicesArray.concat(indicesToBeCleared));
+                return getAllAdjacentSquares(indicesArray.concat(indicesToBeCleared));
             }
         }
     
         // grab all the indices that need to be cleared
-        const indices = clear([clickedIndex]);
+        const indicesToBeCleared = getAllAdjacentSquares([clickedIndex]);
         // set them to active and set state
         mines.forEach((mine, index) => {
-            if(indices.includes(index)) {
+            if(indicesToBeCleared.includes(index)) {
                 mine.active = true;
             }
         });
