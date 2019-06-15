@@ -189,7 +189,6 @@ export class Provider extends Component {
     }
 
     render() {
-        debugger
         return (
             <MineContext.Provider value={{
                 state: this.state,
